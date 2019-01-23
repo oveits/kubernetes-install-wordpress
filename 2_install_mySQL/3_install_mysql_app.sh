@@ -1,10 +1,15 @@
 
+if [ "$NAMESPACE" == "" ]; then
+  echo "usage: export NAMESPACE=staging; $0"
+  exit 1
+fi
+
 cat << EOF > mysqlDeployment.sh
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
   name: mysql
-  namespace: mysql-staging
+  namespace: ${NAMESPACE}
   labels:
     app: wordpress
 spec:
@@ -41,4 +46,8 @@ spec:
           claimName: mysql-pv-claim
 EOF
 
-kubectl apply -f mysqlDeployment.sh
+if [ "$1" == "-d" ]; then
+   kubectl delete -f mysqlDeployment.sh
+else
+   kubectl create -f mysqlDeployment.sh
+fi

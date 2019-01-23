@@ -9,4 +9,8 @@ provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 EOF
 
-kubectl create -f myLocalStorageClass.yaml
+if [ "$1" == "-d" ]; then
+   kubectl delete -f myLocalStorageClass.yaml
+else
+   kubectl create -f myLocalStorageClass.yaml
+fi

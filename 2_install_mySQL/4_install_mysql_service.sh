@@ -1,10 +1,15 @@
 
+if [ "$NAMESPACE" == "" ]; then
+  echo "usage: export NAMESPACE=staging; $0"
+  exit 1
+fi
+
 cat <<EOF > mysqlService.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: wordpress-mysql
-  namespace: mysql-staging
+  namespace: ${NAMESPACE}
   labels:
     app: wordpress
 spec:
@@ -16,4 +21,8 @@ spec:
   clusterIP: None
 EOF
 
-kubectl create -f mysqlService.yaml
+if [ "$1" == "-d" ]; then
+   kubectl delete -f mysqlService.yaml
+else
+   kubectl create -f mysqlService.yaml
+fi
