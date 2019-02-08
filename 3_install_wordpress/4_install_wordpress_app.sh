@@ -28,8 +28,11 @@ spec:
       containers:
       - image: wordpress:4.8-apache
         name: wordpress
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: WORDPRESS_DB_HOST
+          value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-pass

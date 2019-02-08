@@ -28,6 +28,7 @@ spec:
       containers:
       - image: mysql:5.6
         name: mysql
+        terminationMessagePolicy: FallbackToLogsOnError
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:

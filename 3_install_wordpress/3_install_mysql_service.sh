@@ -4,20 +4,24 @@ if [ "$NAMESPACE" == "" ]; then
   exit 1
 fi
 
-cat <<EOF > mysqlService.yaml
+kubectl -n ${NAMESPACE} expose deployment wordpress --port=80
+
+exit 0
+
+cat <<EOF > wordpressService.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-mysql
-  namespace: mysql-staging
+  name: wordpress
+  namespace: ${NAMESPACE}
   labels:
     app: wordpress
 spec:
   ports:
-    - port: 3306
+    - port: 80
   selector:
     app: wordpress
-    tier: mysql
+    tier: frontend
   clusterIP: None
 EOF
 
