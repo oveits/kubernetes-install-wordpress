@@ -1,3 +1,4 @@
 cloudflare-api-key.txt
 kubernetes-ingress
 vocon-it-com-tls
+*.key
