@@ -1,8 +1,10 @@
 
-if [ "$NAMESPACE" == "" ]; then
-  echo "usage: export NAMESPACE=staging; bash $0"
-  exit 1
-fi
+# if NAMESPACE is not defined, use the current namespace:
+[ "$NAMESPACE" == "" ] \
+  && NAMESPACE=$(kubectl config get-contexts | grep '^\*' | awk '{print $5}')
+
+# if current NAMESPACE is not defined, use the default namespace:
+[ "$NAMESPACE" == "" ] && NAMESPACE=default
 
 source $HOME/.cloudflare/credentials.sh || exit "credentials file $HOME/.cloudflare/credentials.sh not found"
 # the file $HOME/.cloudflare/credentials.sh is assumed to have the format
@@ -10,7 +12,7 @@ source $HOME/.cloudflare/credentials.sh || exit "credentials file $HOME/.cloudfl
 # GLOBAL_API_KEY=your_cloudflare_global_api_key
 
 touch cloudflare-api-key.txt
-chmod 400 cloudflare-api-key.txt
+chmod 600 cloudflare-api-key.txt
 echo $GLOBAL_API_KEY > cloudflare-api-key.txt
 
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
