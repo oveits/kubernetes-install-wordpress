@@ -38,6 +38,7 @@ spec:
         - name: cloudflare
           cloudflare:
             email: ${EMAIL}
+            zone: ${ZONE}
             apiKeySecretRef: 
               name: cloudflare-api-key
               key: cloudflare-api-key.txt
