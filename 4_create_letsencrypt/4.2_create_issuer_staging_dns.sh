@@ -40,4 +40,4 @@ spec:
               key: cloudflare-api-key.txt
 EOF
 
-rm cloudflare-api-key.txt
+#rm cloudflare-api-key.txt
