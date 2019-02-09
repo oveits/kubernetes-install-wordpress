@@ -15,6 +15,8 @@ touch cloudflare-api-key.txt
 chmod 600 cloudflare-api-key.txt
 echo $GLOBAL_API_KEY > cloudflare-api-key.txt
 
+kubectl create secret generic cloudflare-api-key --from-file=cloudflare-api-key.txt --namespace=$NAMESPACE
+
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
 
 cat <<EOF | kubectl $CMD -f -
@@ -40,4 +42,4 @@ spec:
               key: cloudflare-api-key.txt
 EOF
 
-#rm cloudflare-api-key.txt
+rm cloudflare-api-key.txt
