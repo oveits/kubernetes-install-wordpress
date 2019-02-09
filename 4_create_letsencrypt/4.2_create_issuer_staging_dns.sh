@@ -13,8 +13,9 @@ source $HOME/.cloudflare/credentials.sh || exit "credentials file $HOME/.cloudfl
 
 touch cloudflare-api-key.txt
 chmod 600 cloudflare-api-key.txt
-echo $GLOBAL_API_KEY > cloudflare-api-key.txt
+echo -n $GLOBAL_API_KEY > cloudflare-api-key.txt
 
+kubectl delete secret cloudflare-api-key --namespace=$NAMESPACE
 kubectl create secret generic cloudflare-api-key --from-file=cloudflare-api-key.txt --namespace=$NAMESPACE
 
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
