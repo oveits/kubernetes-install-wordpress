@@ -32,7 +32,7 @@ spec:
       name: letsencrypt-staging-dns
     dns01:
       providers:
-        - name: my-cloudflare-provider
+        - name: cloudflare
           cloudflare:
             email: ${EMAIL}
             apiKeySecretRef: 
