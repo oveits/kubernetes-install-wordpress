@@ -1,11 +1,14 @@
 
+# if NAMESPACE is not defined, use the current namespace:
+[ "$NAMESPACE" == "" ] \
+  && NAMESPACE=$(kubectl config get-contexts | grep '^\*' | awk '{print $5}')
 
-if [ "$NAMESPACE" == "" ]; then
-  echo "usage: export NAMESPACE=staging; bash $0"
-  exit 1
-fi
+# if current NAMESPACE is not defined, use the default namespace:
+[ "$NAMESPACE" == "" ] && NAMESPACE=default
 
-cat <<EOF > certificate.yaml
+[ "$1" == "-d" ] && CMD=delete || CMD=apply
+
+cat <<EOF | kubectl $CMD -f -
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
@@ -28,6 +31,4 @@ spec:
       - vocon-it.com
 EOF
 
-[ "$?" == "0" ] && \
-kubectl apply -f certificate.yaml
 
