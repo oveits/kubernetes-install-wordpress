@@ -9,6 +9,7 @@
 source $HOME/.cloudflare/credentials.sh || exit "credentials file $HOME/.cloudflare/credentials.sh not found"
 # the file $HOME/.cloudflare/credentials.sh is assumed to have the format
 # EMAIL=your_cloudflare_email_address
+# ZONE=your_cloudflare_zone
 # GLOBAL_API_KEY=your_cloudflare_global_api_key
 
 touch cloudflare-api-key.txt
@@ -17,6 +18,8 @@ echo -n $GLOBAL_API_KEY > cloudflare-api-key.txt
 
 kubectl delete secret cloudflare-api-key --namespace=$NAMESPACE
 kubectl create secret generic cloudflare-api-key --from-file=cloudflare-api-key.txt --namespace=$NAMESPACE
+
+rm cloudflare-api-key.txt
 
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
 
@@ -44,4 +47,3 @@ spec:
               key: cloudflare-api-key.txt
 EOF
 
-rm cloudflare-api-key.txt
