@@ -32,7 +32,7 @@ rm cloudflare-api-key.txt
 
 
 ###
-# create certificate
+# create issuer
 ###
 
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
