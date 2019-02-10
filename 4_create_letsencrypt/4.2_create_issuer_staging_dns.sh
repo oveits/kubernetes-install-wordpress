@@ -1,10 +1,19 @@
 
+###
+# evaluate namespace
+###
+
 # if NAMESPACE is not defined, use the current namespace:
 [ "$NAMESPACE" == "" ] \
   && NAMESPACE=$(kubectl config get-contexts | grep '^\*' | awk '{print $5}')
 
 # if current NAMESPACE is not defined, use the default namespace:
 [ "$NAMESPACE" == "" ] && NAMESPACE=default
+
+
+###
+# create key file and environment variables
+###
 
 source $HOME/.cloudflare/credentials.sh || exit "credentials file $HOME/.cloudflare/credentials.sh not found"
 # the file $HOME/.cloudflare/credentials.sh is assumed to have the format
@@ -20,6 +29,11 @@ kubectl delete secret cloudflare-api-key --namespace=$NAMESPACE 2>/dev/null
 kubectl create secret generic cloudflare-api-key --from-file=cloudflare-api-key.txt --namespace=$NAMESPACE
 
 rm cloudflare-api-key.txt
+
+
+###
+# create certificate
+###
 
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
 
