@@ -16,7 +16,7 @@ touch cloudflare-api-key.txt
 chmod 600 cloudflare-api-key.txt
 echo -n $GLOBAL_API_KEY > cloudflare-api-key.txt
 
-kubectl delete secret cloudflare-api-key --namespace=$NAMESPACE
+kubectl delete secret cloudflare-api-key --namespace=$NAMESPACE 2>/dev/null
 kubectl create secret generic cloudflare-api-key --from-file=cloudflare-api-key.txt --namespace=$NAMESPACE
 
 rm cloudflare-api-key.txt
