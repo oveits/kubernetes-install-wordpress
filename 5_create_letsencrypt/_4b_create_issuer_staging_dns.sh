@@ -1,15 +1,6 @@
 
-###
-# evaluate namespace
-###
-
-# if NAMESPACE is not defined, use the current namespace:
-[ "$NAMESPACE" == "" ] \
-  && NAMESPACE=$(kubectl config get-contexts | grep '^\*' | awk '{print $5}')
-
-# if current NAMESPACE is not defined, use the default namespace:
-[ "$NAMESPACE" == "" ] && NAMESPACE=default
-
+source $CONFIG_FILE
+[ "$1" == "-d" ] && CMD=delete || CMD=apply
 
 ###
 # create key file and environment variables
@@ -30,26 +21,25 @@ kubectl create secret generic cloudflare-api-key --from-file=cloudflare-api-key.
 
 rm cloudflare-api-key.txt
 
-
 ###
 # create issuer
 ###
 
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
 
-cat <<EOF | kubectl $CMD -f -
+cat << EOF | kubectl $CMD -f -
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Issuer
 metadata:
-  name: letsencrypt-dns
+  name: letsencrypt-staging-dns
   namespace: ${NAMESPACE}
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: ${EMAIL}
     privateKeySecretRef:
-      name: letsencrypt-dns
+      name: letsencrypt-staging-dns
     dns01:
       providers:
         - name: cloudflare

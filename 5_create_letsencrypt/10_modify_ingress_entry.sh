@@ -1,7 +1,8 @@
 
-source 0_source_set_namespace_and_cmd.sh
+source $CONFIG_FILE
+[ "$1" == "-d" ] && CMD=delete || CMD=apply
 
-cat <<EOF | kubectl ${CMD} -f -
+cat << EOF | kubectl $CMD -f -
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -11,10 +12,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - vocon-it.com
-      secretName: vocon-it-com-staging-tls
+      - ${BOX}.vocon-it.com
+      secretName: vocon-it-com-tls
   rules:
-    - host: vocon-it.com
+    - host: ${BOX}.vocon-it.com
       http:
         paths:
           - backend:
