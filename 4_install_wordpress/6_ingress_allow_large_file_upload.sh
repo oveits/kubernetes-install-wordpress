@@ -1,12 +1,6 @@
 
 
-source $CONFIG_FILE
 [ "$1" == "-d" ] && CMD=delete || CMD=apply
-
-if [ "$NAMESPACE" == "" ]; then
-  echo "usage: export NAMESPACE=staging; $0"
-  exit 1
-fi
 
 # set max body size and timeout to 2GB and 1200 sec, respectively:
 cat << EOF | kubectl $CMD -f -
