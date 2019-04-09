@@ -19,5 +19,5 @@ EOF
 
 # apply new config by restarting the nginx ingress PODs, if present:
 PODS=$(kubectl get pod -n nginx-ingress | grep '^nginx-ingress' | awk '{print $1}')
-echo $PODS | xargs kubectl delete pod 
+echo $PODS | xargs kubectl -n nginx-ingress delete pod 
 
